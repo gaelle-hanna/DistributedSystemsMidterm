@@ -1,0 +1,33 @@
+
+services:
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: ds-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: ds-grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-data:/var/lib/grafana
+
+  kafka:
+    image: apache/kafka:4.4.0
+    container_name: ds-kafka
+    ports:
+      - "9092:9092"
+
+  rabbitmq:
+    image: rabbitmq:4-management
+    container_name: ds-rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+volumes:
+  grafana-data:
