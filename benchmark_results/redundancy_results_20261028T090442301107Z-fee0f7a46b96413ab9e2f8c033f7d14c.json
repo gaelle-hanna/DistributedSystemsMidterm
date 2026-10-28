@@ -1,0 +1,19 @@
+{
+  "run_id": "20261028T090442301107Z-fee0f7a46b96413ab9e2f8c033f7d14c",
+  "timestamp": "2026-10-28T09:04:42.301107+00:00",
+  "script": "C:\\Users\\User\\Desktop\\Semester 9\\Distributed Systems\\DistributedSystemsMidterm\\benchmark_redundancy.py",
+  "api_url": "http://localhost:8200",
+  "parameters": {
+    "small_count": 5000,
+    "large_count": 10,
+    "large_mb": 100
+  },
+  "buckets": {
+    "replication": "replication-benchmark-20261028T090442301107Z-fee0f7a46b96413ab9e2f8c033f7d14c",
+    "erasure": "erasure-benchmark-20261028T090442301107Z-fee0f7a46b96413ab9e2f8c033f7d14c"
+  },
+  "status": "failed",
+  "workloads": [],
+  "stats_scope": "Entire service, including pre-existing data",
+  "error": "Server error '503 Service Unavailable' for url 'http://localhost:8200/objects/replication-benchmark-20261028T090442301107Z-fee0f7a46b96413ab9e2f8c033f7d14c/small-1365'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/503; API response: {\"detail\":\"Need 2 healthy nodes; found 0\"}"
+}

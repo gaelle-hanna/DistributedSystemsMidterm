@@ -1,0 +1,162 @@
+services:
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: ds-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: ds-grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-data:/var/lib/grafana
+
+  kafka:
+    image: apache/kafka:4.4.0
+    container_name: ds-kafka
+    ports:
+      - "9092:9092"
+
+  rabbitmq:
+    image: rabbitmq:4-management
+    container_name: ds-rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  postgres:
+    image: postgres:16
+    container_name: ds-postgres
+    environment:
+      POSTGRES_USER: storage
+      POSTGRES_PASSWORD: storagepass
+      POSTGRES_DB: storage_db
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U storage -d storage_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  metadata:
+    build: .
+    container_name: ds-metadata
+    command: uvicorn metadata_service:app --host 0.0.0.0 --port 8000
+    environment:
+      DATABASE_URL: postgresql://storage:storagepass@postgres:5432/storage_db
+    ports:
+      - "8100:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  redundancy:
+    build: .
+    container_name: ds-redundancy
+    command: uvicorn redundancy_service:app --host 0.0.0.0 --port 8000
+    environment:
+      DATABASE_URL: postgresql://storage:storagepass@postgres:5432/storage_db
+      METADATA_URL: http://metadata:8000
+      SCRUB_SECONDS: 20
+    ports:
+      - "8200:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      metadata:
+        condition: service_started
+
+  node1:
+    build: .
+    container_name: ds-node1
+    environment:
+      NODE_ID: node1
+      STORAGE_DIR: /data
+      METADATA_URL: http://metadata:8000
+    ports:
+      - "8101:8000"
+    volumes:
+      - ./storage_nodes/node1:/data
+    depends_on:
+      - metadata
+
+  node2:
+    build: .
+    container_name: ds-node2
+    environment:
+      NODE_ID: node2
+      STORAGE_DIR: /data
+      METADATA_URL: http://metadata:8000
+    ports:
+      - "8102:8000"
+    volumes:
+      - ./storage_nodes/node2:/data
+    depends_on:
+      - metadata
+
+  node3:
+    build: .
+    container_name: ds-node3
+    environment:
+      NODE_ID: node3
+      STORAGE_DIR: /data
+      METADATA_URL: http://metadata:8000
+    ports:
+      - "8103:8000"
+    volumes:
+      - ./storage_nodes/node3:/data
+    depends_on:
+      - metadata
+
+  node4:
+    build: .
+    container_name: ds-node4
+    environment:
+      NODE_ID: node4
+      STORAGE_DIR: /data
+      METADATA_URL: http://metadata:8000
+    ports:
+      - "8104:8000"
+    volumes:
+      - ./storage_nodes/node4:/data
+    depends_on:
+      - metadata
+
+  node5:
+    build: .
+    container_name: ds-node5
+    environment:
+      NODE_ID: node5
+      STORAGE_DIR: /data
+      METADATA_URL: http://metadata:8000
+    ports:
+      - "8105:8000"
+    volumes:
+      - ./storage_nodes/node5:/data
+    depends_on:
+      - metadata
+
+  node6:
+    build: .
+    container_name: ds-node6
+    environment:
+      NODE_ID: node6
+      STORAGE_DIR: /data
+      METADATA_URL: http://metadata:8000
+    ports:
+      - "8106:8000"
+    volumes:
+      - ./storage_nodes/node6:/data
+    depends_on:
+      - metadata
+
+volumes:
+  grafana-data:
+  postgres-data:

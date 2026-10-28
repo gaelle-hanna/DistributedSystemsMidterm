@@ -1,0 +1,5 @@
+cd "C:\Users\User\Desktop\Semester 9\Distributed Systems\DistributedSystemsMidterm"
+.\venv\Scripts\Activate.ps1
+docker compose up -d
+docker compose ps
+kubectl get nodes

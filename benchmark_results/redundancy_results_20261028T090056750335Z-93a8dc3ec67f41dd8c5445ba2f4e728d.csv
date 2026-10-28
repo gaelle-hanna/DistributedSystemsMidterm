@@ -1,0 +1,5 @@
+mode,bucket,workload,files,logical_bytes,written_shard_bytes,storage_overhead,upload_seconds
+replication,replication-benchmark-20261028T090056750335Z-93a8dc3ec67f41dd8c5445ba2f4e728d,small,2,34003,102009,3.0,0.17
+replication,replication-benchmark-20261028T090056750335Z-93a8dc3ec67f41dd8c5445ba2f4e728d,large,1,1048576,3145728,3.0,0.09
+erasure,erasure-benchmark-20261028T090056750335Z-93a8dc3ec67f41dd8c5445ba2f4e728d,small,2,34003,51012,1.5,0.15
+erasure,erasure-benchmark-20261028T090056750335Z-93a8dc3ec67f41dd8c5445ba2f4e728d,large,1,1048576,1572864,1.5,0.1

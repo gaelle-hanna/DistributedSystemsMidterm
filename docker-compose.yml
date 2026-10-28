@@ -1,4 +1,3 @@
-
 services:
   prometheus:
     image: prom/prometheus:latest
@@ -58,6 +57,22 @@ services:
       postgres:
         condition: service_healthy
 
+  redundancy:
+    build: .
+    container_name: ds-redundancy
+    command: uvicorn redundancy_service:app --host 0.0.0.0 --port 8000
+    environment:
+      DATABASE_URL: postgresql://storage:storagepass@postgres:5432/storage_db
+      METADATA_URL: http://metadata:8000
+      SCRUB_SECONDS: 20
+    ports:
+      - "8200:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      metadata:
+        condition: service_started
+
   node1:
     build: .
     container_name: ds-node1
@@ -111,6 +126,34 @@ services:
       - "8104:8000"
     volumes:
       - ./storage_nodes/node4:/data
+    depends_on:
+      - metadata
+
+  node5:
+    build: .
+    container_name: ds-node5
+    environment:
+      NODE_ID: node5
+      STORAGE_DIR: /data
+      METADATA_URL: http://metadata:8000
+    ports:
+      - "8105:8000"
+    volumes:
+      - ./storage_nodes/node5:/data
+    depends_on:
+      - metadata
+
+  node6:
+    build: .
+    container_name: ds-node6
+    environment:
+      NODE_ID: node6
+      STORAGE_DIR: /data
+      METADATA_URL: http://metadata:8000
+    ports:
+      - "8106:8000"
+    volumes:
+      - ./storage_nodes/node6:/data
     depends_on:
       - metadata
 

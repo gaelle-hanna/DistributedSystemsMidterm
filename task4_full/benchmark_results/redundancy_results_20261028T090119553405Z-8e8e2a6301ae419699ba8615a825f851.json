@@ -1,0 +1,90 @@
+{
+  "run_id": "20261028T090119553405Z-8e8e2a6301ae419699ba8615a825f851",
+  "timestamp": "2026-10-28T09:01:19.553405+00:00",
+  "script": "C:\\Users\\User\\Desktop\\Semester 9\\Distributed Systems\\DistributedSystemsMidterm\\task4_full\\benchmark_redundancy.py",
+  "api_url": "http://localhost:8200",
+  "parameters": {
+    "small_count": 1,
+    "large_count": 1,
+    "large_mb": 100
+  },
+  "buckets": {
+    "replication": "replication-benchmark-20261028T090119553405Z-8e8e2a6301ae419699ba8615a825f851",
+    "erasure": "erasure-benchmark-20261028T090119553405Z-8e8e2a6301ae419699ba8615a825f851"
+  },
+  "status": "completed",
+  "workloads": [
+    {
+      "mode": "replication",
+      "bucket": "replication-benchmark-20261028T090119553405Z-8e8e2a6301ae419699ba8615a825f851",
+      "workload": "small",
+      "files": 1,
+      "logical_bytes": 29137,
+      "written_shard_bytes": 87411,
+      "storage_overhead": 3.0,
+      "upload_seconds": 0.11
+    },
+    {
+      "mode": "replication",
+      "bucket": "replication-benchmark-20261028T090119553405Z-8e8e2a6301ae419699ba8615a825f851",
+      "workload": "large",
+      "files": 1,
+      "logical_bytes": 104857600,
+      "written_shard_bytes": 314572800,
+      "storage_overhead": 3.0,
+      "upload_seconds": 5.11
+    },
+    {
+      "mode": "erasure",
+      "bucket": "erasure-benchmark-20261028T090119553405Z-8e8e2a6301ae419699ba8615a825f851",
+      "workload": "small",
+      "files": 1,
+      "logical_bytes": 29137,
+      "written_shard_bytes": 43710,
+      "storage_overhead": 1.5,
+      "upload_seconds": 0.29
+    },
+    {
+      "mode": "erasure",
+      "bucket": "erasure-benchmark-20261028T090119553405Z-8e8e2a6301ae419699ba8615a825f851",
+      "workload": "large",
+      "files": 1,
+      "logical_bytes": 104857600,
+      "written_shard_bytes": 157286400,
+      "storage_overhead": 1.5,
+      "upload_seconds": 32.69
+    }
+  ],
+  "stats_scope": "Entire service, including pre-existing data",
+  "stats": {
+    "modes": [
+      {
+        "mode": "erasure",
+        "logical_bytes": 116455076,
+        "recorded_shard_bytes": 174682626,
+        "overhead_ratio": 1.5
+      },
+      {
+        "mode": "replication",
+        "logical_bytes": 133417191,
+        "recorded_shard_bytes": 400251573,
+        "overhead_ratio": 3.0
+      }
+    ],
+    "traffic_counters": {
+      "repair_bytes_read": 14680064,
+      "repair_bytes_written": 6815744,
+      "scrub_checks": 16605,
+      "scrub_corrupt": 0,
+      "repair_operations": 4
+    },
+    "healthy_nodes": [
+      "node1",
+      "node2",
+      "node3",
+      "node4",
+      "node5",
+      "node6"
+    ]
+  }
+}
