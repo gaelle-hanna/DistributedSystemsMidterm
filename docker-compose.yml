@@ -29,5 +29,91 @@ services:
       - "5672:5672"
       - "15672:15672"
 
+  postgres:
+    image: postgres:16
+    container_name: ds-postgres
+    environment:
+      POSTGRES_USER: storage
+      POSTGRES_PASSWORD: storagepass
+      POSTGRES_DB: storage_db
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U storage -d storage_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  metadata:
+    build: .
+    container_name: ds-metadata
+    command: uvicorn metadata_service:app --host 0.0.0.0 --port 8000
+    environment:
+      DATABASE_URL: postgresql://storage:storagepass@postgres:5432/storage_db
+    ports:
+      - "8100:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  node1:
+    build: .
+    container_name: ds-node1
+    environment:
+      NODE_ID: node1
+      STORAGE_DIR: /data
+      METADATA_URL: http://metadata:8000
+    ports:
+      - "8101:8000"
+    volumes:
+      - ./storage_nodes/node1:/data
+    depends_on:
+      - metadata
+
+  node2:
+    build: .
+    container_name: ds-node2
+    environment:
+      NODE_ID: node2
+      STORAGE_DIR: /data
+      METADATA_URL: http://metadata:8000
+    ports:
+      - "8102:8000"
+    volumes:
+      - ./storage_nodes/node2:/data
+    depends_on:
+      - metadata
+
+  node3:
+    build: .
+    container_name: ds-node3
+    environment:
+      NODE_ID: node3
+      STORAGE_DIR: /data
+      METADATA_URL: http://metadata:8000
+    ports:
+      - "8103:8000"
+    volumes:
+      - ./storage_nodes/node3:/data
+    depends_on:
+      - metadata
+
+  node4:
+    build: .
+    container_name: ds-node4
+    environment:
+      NODE_ID: node4
+      STORAGE_DIR: /data
+      METADATA_URL: http://metadata:8000
+    ports:
+      - "8104:8000"
+    volumes:
+      - ./storage_nodes/node4:/data
+    depends_on:
+      - metadata
+
 volumes:
   grafana-data:
+  postgres-data:

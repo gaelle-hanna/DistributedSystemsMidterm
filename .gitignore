@@ -5,5 +5,9 @@ __pycache__/
 *.pyc
 .env
 .idea/
-
 storage_nodes/
+test-chunk.txt
+downloaded-chunk.txt
+corruption-test.txt
+sample10mb.bin
+restored10mb.bin
