@@ -1,5 +1,9 @@
+
 venv/
 .venv/
 __pycache__/
+*.pyc
 .env
 .idea/
+
+storage_nodes/
